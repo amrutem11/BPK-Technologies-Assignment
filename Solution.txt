@@ -1,0 +1,60 @@
+
+To solve this question we will have to create two tables - Students and Marks.
+
+First we wil create the table named Students, which will contain the basic information of students like first name,last name,dob,etc. To create this table we will run this query - 
+	
+	CREATE TABLE Students (
+    roll_no INT PRIMARY KEY,
+    first_name VARCHAR(20),
+    last_name VARCHAR(20),
+    standard INT,
+    CHECK (standard BETWEEN 1 AND 8)
+    dob DATE,
+    parent_name VARCHAR(40),
+    address VARCHAR(100),
+    city VARCHAR(20),
+    phone_number VARCHAR(10),
+    
+);
+
+This will create the table named student which will contain all the details of the students.
+We are using CHECK constraint here to restrict the entries of standard column outside of 1 to 8 in database.
+
+Now we will add the student entries in this students table using following query - 
+
+INSERT INTO Students (roll_no, first_name, last_name, standard, dob, parent_name, address, city, phone_number)
+VALUES (11,'Amol', 'Rahi', 6, '1998-11-15', 'Sagar Rahi', ‘Om Shanti Apartment’, 'Pune', '9876543210');
+
+
+
+Next we will create the table named Marks which will contain students marks in all the subjects which they are studying.
+ 
+Query - 
+	CREATE TABLE Marks (
+    roll_no INT,
+    subject_name VARCHAR(20),
+    marks_obtained INT,
+    total_marks INT,
+    FOREIGN KEY (roll_no) REFERENCES students(roll_no)
+);
+
+Here we are using roll_no column as a foreign key to establish the relation between students and  marks table to set the marks of each student.
+Now to add the student’s marks in the marks table using following query - 
+
+INSERT INTO Marks (roll_no, subject_name, marks_obtained, total_marks)
+VALUES (11, 'Physics’', 78, 100);
+
+
+
+
+
+Now to show all the students who have scored more than 60% - 
+
+ We will use this query - 
+
+SELECT s.roll_no, s.first_name, s.last_name, s.standard, m.subject_name, SUM(m.marks_obtained) AS marksObtained ,SUM( m.total_marks) AS total
+FROM Students s
+JOIN Marks m ON s.roll_no = m.roll_no
+WHERE (SUM(m.marks_obtained) / SUM( m.total_marks)) * 100 > 60;
+
+This query will fetch the details of all the students who have scored marks more than 60%.
